@@ -1,1 +1,39 @@
+install.packages(“tidyverse”)
 
+install.packages(“leaflet”)
+
+install.packages(“shiny”)
+
+library(tidyverse)
+
+library(leaflet)
+
+library(shiny)
+
+df <- read_csv(“nodes1_casts.csv”)
+
+df2<-df[c(1,3:7,14:15),]
+
+m<-leaflet(df2) %>%
+
++	addProviderTiles(providers$CartoDB.Positron) %>%
+
++	addCircleMarkers(df2$blanton_lon, df2$blanton_lat, color = “navy”, stroke = FALSE, fillOpacity = 0.5, group = “Museums”, popup = df$blanton_title) %>%
+
++	addCircleMarkers(df2$find_lon, df2$find_lat, color = “yellow”, stroke = FALSE, fillOpacity = 0.5, group = “Findspots”, popup = df$blanton_title) %>%
+
++	addCircleMarkers(df2$mus_lon, df2$mus_lat, color = “blue”, stroke = FALSE, fillOpacity = 0.5, group = “Museums”, popup = df$blanton_title) %>%
+
++	addCircleMarkers(df2$make_lon, df2$make_lat, color = “red”, stroke = FALSE, fillOpacity = 0.5, group = “Cast Makers”, popup = df$blanton_title) %>%
+
++	addLayersControl(overlayGroups = c(“Museum”, “Findspot”, “Cast Maker”), options = layersControlOptions(collapsed = TRUE)) %>%
+
++	addLegend(“bottomright”, colors = c(“yellow”, “blue”, “red”, “navy”), labels = c(“Findspot”, “Museum”, “Casting Company”, “Blanton”), opacity = 1, title = “Legend”)
+
+m
+
+install.packages(“mapview”)
+
+library(mapview)
+
+mapshot(m, file = “~/battle_map.png”)
